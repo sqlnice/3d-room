@@ -1,0 +1,33 @@
+{
+  "name": "3d-room",
+  "version": "1.0.0",
+  "description": "使用 Three.js 构建的 3D 机房.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sqlnice/3d-room.git"
+  },
+  "keywords": [
+    "Three.js",
+    "3D"
+  ],
+  "author": "Felix",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sqlnice/3d-room/issues"
+  },
+  "homepage": "https://github.com/sqlnice/3d-room#readme",
+  "dependencies": {
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "vite": "^4.4.5"
+  }
+}
