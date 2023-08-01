@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/sqlnice/3d-room#readme",
   "dependencies": {
+    "three": "^0.155.0",
     "vue": "^3.3.4"
   },
   "devDependencies": {
