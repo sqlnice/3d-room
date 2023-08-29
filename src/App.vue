@@ -3,7 +3,8 @@ import * as Three from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls'
 import { onMounted } from 'vue'
 import floorImage from '@/assets/floor.jpg'
-import { walls } from './data'
+import airImage from '@/assets/air.png'
+import { walls, airs } from './data'
 onMounted(() => {
   const canvas = document.getElementById('three')
   // 渲染器
@@ -74,6 +75,43 @@ onMounted(() => {
       wall.position.set(px, py, pz)
       wall.rotation.y = ry
       scene.add(wall)
+    }
+  }
+
+  // 空调
+  {
+    for (let i = 0; i < airs.length; i++) {
+      const air = airs[i]
+      const { w, h, depth, pz, px, py } = air
+      const airGeometry = new Three.BoxGeometry(w, h, depth)
+      const texture = new Three.TextureLoader().load(airImage, () => {
+        texture.wrapS = texture.wrapT = Three.RepeatWrapping
+        texture.repeat.set(1, 1)
+      })
+      const airMaterials = [
+        new Three.MeshBasicMaterial({
+          color: 0xbbbbbb
+        }),
+        new Three.MeshBasicMaterial({
+          color: 0xbbbbbb
+        }),
+        new Three.MeshBasicMaterial({
+          color: 0xbbbbbb
+        }),
+        new Three.MeshBasicMaterial({
+          color: 0xbbbbbb
+        }),
+        new Three.MeshBasicMaterial({
+          map: texture
+        }),
+        new Three.MeshBasicMaterial({
+          color: 0xbbbbbb
+        })
+      ]
+      const airMesh = new Three.Mesh(airGeometry, airMaterials)
+      airMesh.position.set(px, py, pz)
+      airMesh.rotation.y = Math.PI / 2
+      scene.add(airMesh)
     }
   }
   // 方块

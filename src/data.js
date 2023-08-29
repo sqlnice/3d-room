@@ -64,3 +64,19 @@ export const walls = [
     ry: Math.PI / 2
   }
 ]
+
+/**
+ * @typedef {Object} Air
+ * @property {number} w 宽度
+ * @property {number} h 高度
+ * @property {number} depth 厚度
+ * @property {number} px x轴位置
+ * @property {number} py y轴位置
+ * @property {number} pz z轴位置
+ */
+export const airs = [
+  { w: 15, h: 40, depth: 10, px: -180, py: 20, pz: -75 },
+  { w: 15, h: 40, depth: 10, px: -180, py: 20, pz: -25 },
+  { w: 15, h: 40, depth: 10, px: -180, py: 20, pz: 25 },
+  { w: 15, h: 40, depth: 10, px: -180, py: 20, pz: 75 }
+]
