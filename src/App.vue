@@ -1,5 +1,6 @@
 <script setup>
 import * as Three from 'three'
+import { CSG } from 'three-csg-ts'
 import { OrbitControls } from 'three/addons/controls/OrbitControls'
 import { onMounted } from 'vue'
 import floorImage from '@/assets/floor.jpg'
@@ -49,7 +50,7 @@ onMounted(() => {
   // 墙
   {
     for (let i = 0; i < walls.length; i++) {
-      const { w, h, depth, pz, px, py, color, ry } = walls[i]
+      const { w, h, depth, pz, px, py, color, ry, window } = walls[i]
       const wallGeometry = new Three.BoxGeometry(w, h, depth)
       const wallMaterials = [
         new Three.MeshBasicMaterial({
@@ -74,7 +75,34 @@ onMounted(() => {
       const wall = new Three.Mesh(wallGeometry, wallMaterials)
       wall.position.set(px, py, pz)
       wall.rotation.y = ry
-      scene.add(wall)
+      if (window) {
+        const { w, h, depth, offset } = window
+        // 窗户
+        const sphere = new Three.Mesh(new Three.BoxGeometry(w, h, depth))
+        // 玻璃
+        const glass = new Three.Mesh(
+          new Three.BoxGeometry(w, h, depth),
+          new Three.MeshBasicMaterial({
+            color: 0x003333,
+            opacity: 0.4,
+            transparent: true,
+            side: Three.DoubleSide
+          })
+        )
+        // 保持和墙壁同一位置
+        sphere.position.set(px + offset, py, pz)
+        sphere.rotation.y = ry
+        glass.position.set(px + offset, py, pz)
+        glass.rotation.y = ry
+
+        wall.updateMatrix()
+        sphere.updateMatrix()
+        const subRes = CSG.subtract(wall, sphere)
+        scene.add(subRes)
+        scene.add(glass)
+      } else {
+        scene.add(wall)
+      }
     }
   }
 
@@ -115,9 +143,10 @@ onMounted(() => {
     }
   }
   // 方块
-  const geometry = new Three.BoxGeometry(100, 100)
+  const geometry = new Three.BoxGeometry(30, 30, 30)
   const material = new Three.MeshBasicMaterial({ color: 0x00ff00 })
   const cube = new Three.Mesh(geometry, material)
+  cube.position.y = 15
   scene.add(cube)
 
   const render = () => {

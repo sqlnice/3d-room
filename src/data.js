@@ -6,6 +6,10 @@
  * @property {number} px x轴位置
  * @property {number} py y轴位置
  * @property {number} pz z轴位置
+ * @property {string} color 颜色
+ * @property {number} ry y轴旋转角度
+ * @property {Object} window 窗户
+ * @property {Object[]} doors 门
  */
 const w = 400,
   h = 30,
@@ -41,7 +45,14 @@ export const walls = [
     py,
     pz: 125,
     color,
-    ry: 0
+    ry: 0,
+    window: {
+      w: w - 100,
+      h: h - 5,
+      depth,
+      offset: 40
+    },
+    doors: []
   },
   {
     w: 250,
@@ -61,7 +72,14 @@ export const walls = [
     py,
     pz: 0,
     color,
-    ry: Math.PI / 2
+    ry: Math.PI / 2,
+    window: {
+      w: 200,
+      h: h - 5,
+      depth,
+      offset: 0
+    },
+    doors: []
   }
 ]
 
