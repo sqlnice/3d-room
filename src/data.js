@@ -15,7 +15,9 @@ const w = 400,
   h = 30,
   depth = 2,
   py = 15,
-  color = '#b2b4c5'
+  color = '#b2b4c5',
+  windowColor = 0x003333,
+  windowOpacity = 0.4
 export const walls = [
   {
     w,
@@ -49,10 +51,18 @@ export const walls = [
     window: {
       w: w - 100,
       h: h - 5,
-      depth,
-      offset: 40
+      offsetX: 40,
+      offsetZ: 0,
+      color: windowColor,
+      opacity: windowOpacity
     },
-    doors: []
+    doors: [
+      {
+        w: 15,
+        h: h - 5,
+        offsetX: -130
+      }
+    ]
   },
   {
     w: 250,
@@ -74,12 +84,20 @@ export const walls = [
     color,
     ry: Math.PI / 2,
     window: {
-      w: 200,
+      w: 220,
       h: h - 5,
-      depth,
-      offset: 0
+      offsetX: 0,
+      offsetZ: 10,
+      color: windowColor,
+      opacity: windowOpacity
     },
-    doors: []
+    doors: [
+      {
+        w: 15,
+        h: h - 5,
+        offsetZ: -110
+      }
+    ]
   }
 ]
 

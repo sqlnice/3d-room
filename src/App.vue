@@ -1,11 +1,13 @@
 <script setup>
 import * as Three from 'three'
+import TWEEN from '@tweenjs/tween.js'
 import { CSG } from 'three-csg-ts'
 import { OrbitControls } from 'three/addons/controls/OrbitControls'
 import { onMounted } from 'vue'
 import floorImage from '@/assets/floor.jpg'
 import airImage from '@/assets/air.png'
 import { walls, airs } from './data'
+import { createWindow, createDoor, getOperateObject } from './util'
 onMounted(() => {
   const canvas = document.getElementById('three')
   // 渲染器
@@ -30,6 +32,13 @@ onMounted(() => {
   const controls = new OrbitControls(camera, canvas)
   controls.update()
 
+  // 绑定事件
+  canvas.ondblclick = event => {
+    const obj = getOperateObject(canvas, event, scene, camera)
+    if (!obj) return
+    if (typeof obj.dblclick === 'function') obj.dblclick(obj)
+  }
+
   // 地面
   const texture = new Three.TextureLoader().load(floorImage, () => {
     texture.wrapS = Three.RepeatWrapping
@@ -50,7 +59,8 @@ onMounted(() => {
   // 墙
   {
     for (let i = 0; i < walls.length; i++) {
-      const { w, h, depth, pz, px, py, color, ry, window } = walls[i]
+      const wallOption = walls[i]
+      const { w, h, depth, pz, px, py, color, ry, window, doors } = wallOption
       const wallGeometry = new Three.BoxGeometry(w, h, depth)
       const wallMaterials = [
         new Three.MeshBasicMaterial({
@@ -72,34 +82,43 @@ onMounted(() => {
           color
         })
       ]
-      const wall = new Three.Mesh(wallGeometry, wallMaterials)
+      let wall = new Three.Mesh(wallGeometry, wallMaterials)
       wall.position.set(px, py, pz)
       wall.rotation.y = ry
+      wall.updateMatrix()
+      let wallBSP = CSG.fromMesh(wall)
       if (window) {
-        const { w, h, depth, offset } = window
-        // 窗户
-        const sphere = new Three.Mesh(new Three.BoxGeometry(w, h, depth))
-        // 玻璃
-        const glass = new Three.Mesh(
-          new Three.BoxGeometry(w, h, depth),
-          new Three.MeshBasicMaterial({
-            color: 0x003333,
-            opacity: 0.4,
-            transparent: true,
-            side: Three.DoubleSide
-          })
-        )
-        // 保持和墙壁同一位置
-        sphere.position.set(px + offset, py, pz)
-        sphere.rotation.y = ry
-        glass.position.set(px + offset, py, pz)
+        // 挖洞
+        const { w, h, offsetX = 0, offsetZ = 0 } = window
+        const glass = new Three.Mesh(new Three.BoxGeometry(w, h, depth))
+        glass.position.set(px + offsetX, py, pz + offsetZ)
         glass.rotation.y = ry
+        glass.updateMatrix()
+        const glassBSP = CSG.fromMesh(glass)
+        wallBSP = wallBSP.subtract(glassBSP)
 
-        wall.updateMatrix()
-        sphere.updateMatrix()
-        const subRes = CSG.subtract(wall, sphere)
-        scene.add(subRes)
-        scene.add(glass)
+        // 添加玻璃窗
+        createWindow(scene, wallOption, window)
+      }
+      if (doors && doors.length) {
+        for (let i = 0; i < doors.length; i++) {
+          const { w, h, offsetX = 0, offsetZ = 0 } = doors[i]
+          // 挖洞
+          const doorGeometry = new Three.BoxGeometry(w, h, depth)
+          const door = new Three.Mesh(doorGeometry)
+          door.position.set(px + offsetX, py, pz + offsetZ)
+          door.rotation.y = ry
+          door.updateMatrix()
+          const doorBSP = CSG.fromMesh(door)
+          wallBSP = wallBSP.subtract(doorBSP)
+
+          // 添加门
+          createDoor(scene, wallOption, doors[i])
+        }
+      }
+      if (window || doors) {
+        const meshResult = CSG.toMesh(wallBSP, wall.matrix, wall.material)
+        scene.add(meshResult)
       } else {
         scene.add(wall)
       }
@@ -142,14 +161,9 @@ onMounted(() => {
       scene.add(airMesh)
     }
   }
-  // 方块
-  const geometry = new Three.BoxGeometry(30, 30, 30)
-  const material = new Three.MeshBasicMaterial({ color: 0x00ff00 })
-  const cube = new Three.Mesh(geometry, material)
-  cube.position.y = 15
-  scene.add(cube)
 
   const render = () => {
+    TWEEN.update()
     requestAnimationFrame(render)
     renderer.render(scene, camera)
   }
