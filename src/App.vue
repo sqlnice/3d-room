@@ -21,12 +21,12 @@ onMounted(() => {
   scene.background = new Three.Color(0x001111)
 
   // 相机
-  const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 999)
+  const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000)
+  camera.position.set(0, 800, 400)
   scene.add(camera)
   const axesHelper = new Three.AxesHelper(500)
   scene.add(axesHelper)
   // 垂直向下看
-  camera.position.set(0, 150, 300)
 
   // 控制器
   const controls = new OrbitControls(camera, canvas)
@@ -41,12 +41,11 @@ onMounted(() => {
 
   // 地面
   const texture = new Three.TextureLoader().load(floorImage, () => {
-    texture.wrapS = Three.RepeatWrapping
-    texture.wrapT = Three.RepeatWrapping
-    const repeatX = 2
+    texture.wrapS = texture.wrapT = Three.RepeatWrapping
+    const repeatX = 2.4
     const repeatY = repeatX * (texture.image.height / texture.image.width)
     texture.repeat.set(repeatX, repeatY)
-    const planeGeometry = new Three.PlaneGeometry(600, 500)
+    const planeGeometry = new Three.PlaneGeometry(1200, 1000)
     const planeMaterial = new Three.MeshBasicMaterial({
       map: texture,
       side: Three.DoubleSide

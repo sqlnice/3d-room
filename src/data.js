@@ -11,91 +11,98 @@
  * @property {Object} window 窗户
  * @property {Object[]} doors 门
  */
-const w = 400,
-  h = 30,
-  depth = 2,
-  py = 15,
+const h = 100,
+  depth = 4,
+  py = 50,
   color = '#b2b4c5',
+  doorWidth = 50,
+  doorHeight = h - 5,
+  windowHeight = h - 20,
   windowColor = 0x003333,
   windowOpacity = 0.4
 export const walls = [
   {
-    w,
+    w: 800,
     h,
     depth,
     px: 0,
     py,
-    pz: -125,
+    pz: -300,
     color,
     ry: 0
   },
   {
-    w: 250,
+    w: 600,
     h,
     depth,
-    px: 200,
+    px: 400,
     py,
     pz: 0,
     color,
     ry: Math.PI / 2
   },
   {
-    w,
+    w: 800,
     h,
     depth,
     px: 0,
     py,
-    pz: 125,
+    pz: 300,
     color,
     ry: 0,
     window: {
-      w: w - 100,
-      h: h - 5,
-      offsetX: 40,
+      w: 580,
+      h: windowHeight,
+      offsetX: 50,
       offsetZ: 0,
       color: windowColor,
       opacity: windowOpacity
     },
     doors: [
       {
-        w: 15,
-        h: h - 5,
-        offsetX: -130
+        w: doorWidth,
+        h: doorHeight,
+        offsetX: -270
+      },
+      {
+        w: doorWidth,
+        h: doorHeight,
+        offsetX: 370
       }
     ]
   },
   {
-    w: 250,
+    w: 600,
     h,
     depth,
-    px: -200,
+    px: -400,
     py,
     pz: 0,
     color,
     ry: Math.PI / 2
   },
   {
-    w: 250,
+    w: 600,
     h,
     depth,
-    px: -150,
+    px: -300,
     py,
     pz: 0,
     color,
     ry: Math.PI / 2,
     window: {
-      w: 220,
-      h: h - 5,
+      w: 520,
+      h: windowHeight,
       offsetX: 0,
-      offsetZ: 10,
+      offsetZ: 30,
       color: windowColor,
       opacity: windowOpacity
     },
     doors: [
       {
-        w: 15,
-        h: h - 5,
-        offsetZ: -110
+        w: doorWidth,
+        h: doorHeight,
+        offsetZ: -260
       }
     ]
   }
@@ -111,8 +118,8 @@ export const walls = [
  * @property {number} pz z轴位置
  */
 export const airs = [
-  { w: 15, h: 40, depth: 10, px: -180, py: 20, pz: -75 },
-  { w: 15, h: 40, depth: 10, px: -180, py: 20, pz: -25 },
-  { w: 15, h: 40, depth: 10, px: -180, py: 20, pz: 25 },
-  { w: 15, h: 40, depth: 10, px: -180, py: 20, pz: 75 }
+  { w: 30, h: h - 10, depth: 15, px: -360, py: 45, pz: -180 },
+  { w: 30, h: h - 10, depth: 15, px: -360, py: 45, pz: -60 },
+  { w: 30, h: h - 10, depth: 15, px: -360, py: 45, pz: 60 },
+  { w: 30, h: h - 10, depth: 15, px: -360, py: 45, pz: 180 }
 ]
