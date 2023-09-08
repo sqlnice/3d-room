@@ -8,6 +8,7 @@ import floorImage from '@/assets/floor.jpg'
 import airImage from '@/assets/air.png'
 import { walls, airs } from './data'
 import { createWindow, createDoor, getOperateObject } from './util'
+import { ThreeRoom } from '@/three/ThreeRoom.js'
 onMounted(() => {
   const canvas = document.getElementById('three')
   // 渲染器
@@ -168,6 +169,10 @@ onMounted(() => {
   }
   requestAnimationFrame(render)
 })
+// let threeRoom
+// onMounted(() => {
+//   threeRoom = new ThreeRoom(document.getElementById('three'))
+// })
 </script>
 
 <template>
