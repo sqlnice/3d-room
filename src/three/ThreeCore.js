@@ -1,11 +1,12 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls'
 import { resizeRendererToDisplay } from './util'
+import TWEEN from '@tweenjs/tween.js'
 
-export class ThreeCore {
-  constructor(canvas, option = {}) {
-    console.log('ThreeCore', { ...option })
-    const { scene = {}, camera = {} } = option
+export default class ThreeCore {
+  constructor(canvas, options = {}) {
+    this.options = options
+    const { scene = {}, camera = {} } = options
     this.canvas = canvas
     this.initRenderer()
     this.initScene(scene)
@@ -16,11 +17,8 @@ export class ThreeCore {
     requestAnimationFrame(() => this.render())
     this.init()
   }
-  init() {
-    // 需要继承
-  }
   initRenderer() {
-    const renderer = new THREE.WebGLRenderer(this.canvas)
+    const renderer = new THREE.WebGLRenderer({ canvas: this.canvas })
     renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer = renderer
   }
@@ -70,7 +68,24 @@ export class ThreeCore {
       this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight
       this.camera.updateMatrix()
     }
+    const { needTween = true } = this.options
+    needTween && TWEEN.update()
     this.renderer.render(this.scene, this.camera)
     requestAnimationFrame(() => this.render())
+  }
+
+  getOperateObject(event) {
+    event.preventDefault()
+    const { offsetWidth, offsetHeight } = this.canvas
+    const { left, top } = this.canvas.getBoundingClientRect()
+    const scale = 1
+    const raycaster = new THREE.Raycaster()
+    const mouse = new THREE.Vector2()
+    mouse.x = ((event.clientX - left) / scale / offsetWidth) * 2 - 1
+    mouse.y = -((event.clientY - top) / scale / offsetHeight) * 2 + 1
+    raycaster.setFromCamera(mouse, this.camera)
+    const intersects = raycaster.intersectObjects(this.scene.children, true)
+    if (intersects.length) return intersects[0].object
+    return null
   }
 }
