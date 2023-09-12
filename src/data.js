@@ -123,3 +123,26 @@ export const airs = [
   { w: 30, h: h - 10, depth: 15, px: -360, py: 45, pz: 60 },
   { w: 30, h: h - 10, depth: 15, px: -360, py: 45, pz: 180 }
 ]
+
+const rackWidth = 40,
+  rackHeight = 80,
+  rackDepth = 40
+/**
+ * @typedef {Object} Rack
+ * @property {number} w 宽度
+ * @property {number} h 高度
+ * @property {number} depth 厚度
+ */
+export const racks = [
+  {
+    w: rackWidth,
+    h: rackHeight,
+    depth: rackDepth,
+    px: -100,
+    py: rackHeight / 2,
+    pz: -100,
+    name: '机柜1号',
+    usage: 0.2
+  },
+  { w: rackWidth, h: rackHeight, depth: rackDepth, px: 0, py: rackHeight / 2, pz: -100, name: '机柜2号', usage: 0.8 }
+]

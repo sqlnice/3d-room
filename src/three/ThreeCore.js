@@ -5,6 +5,7 @@ import TWEEN from '@tweenjs/tween.js'
 
 export default class ThreeCore {
   constructor(canvas, options = {}) {
+    if (!canvas) return console.error('canvas is required')
     this.options = options
     const { scene = {}, camera = {} } = options
     this.canvas = canvas

@@ -3,11 +3,16 @@ import ThreeCore from './ThreeCore'
 import defaultFloorImage from '@/assets/floor.jpg'
 import Wall from '@/components/Wall.js'
 import Air from '@/components/Air.js'
+import SimpleRack from '@/components/SimpleRack.js'
 export default class ThreeRoom extends ThreeCore {
   init() {
+    if (!this.canvas) return
     this.createFloor()
     if (this.options.needBindEvent) {
       this.bindEvent()
+      const { hover, closeHover } = this.options
+      this.hover = hover
+      this.closeHover = closeHover
     }
   }
   bindEvent() {
@@ -15,8 +20,21 @@ export default class ThreeRoom extends ThreeCore {
       const obj = this.getOperateObject(event)
       if (!obj) return
       if (typeof obj.dblclick === 'function') {
-        console.log(obj.dblclick)
         obj.dblclick(obj)
+      }
+    }
+    this.canvas.onmousemove = event => {
+      const obj = this.getOperateObject(event)
+      if (!obj) return
+      if (typeof obj.hover === 'function') {
+        obj.hover(obj)
+        this.hover(event, obj.userData)
+      } else if (obj.parent && typeof obj.parent.hover === 'function') {
+        obj.parent.hover(obj)
+        this.hover(event, obj.userData)
+      } else {
+        typeof obj.closeHover === 'function' && obj.closeHover(obj)
+        this.closeHover(obj)
       }
     }
   }
@@ -43,5 +61,11 @@ export default class ThreeRoom extends ThreeCore {
     const { walls = [], airs = [] } = configs
     new Air(this.scene, airs)
     new Wall(this.scene, walls)
+  }
+  createRack(configs) {
+    const { racks = [] } = configs
+    for (let i = 0; i < racks.length; i++) {
+      new SimpleRack(this.scene, racks[i])
+    }
   }
 }
