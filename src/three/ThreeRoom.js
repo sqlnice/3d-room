@@ -4,6 +4,7 @@ import defaultFloorImage from '@/assets/floor.jpg'
 import Wall from '@/components/Wall.js'
 import Air from '@/components/Air.js'
 import SimpleRack from '@/components/SimpleRack.js'
+import ShowRackCapacity from '@/components/ShowRackCapacity.js'
 export default class ThreeRoom extends ThreeCore {
   init() {
     if (!this.canvas) return
@@ -66,6 +67,21 @@ export default class ThreeRoom extends ThreeCore {
     const { racks = [] } = configs
     for (let i = 0; i < racks.length; i++) {
       new SimpleRack(this.scene, racks[i])
+    }
+  }
+  // 控制显隐
+  controlRack(show = true) {
+    this.scene.children.map(item => {
+      if (item.name === 'SimpleRack') item.visible = show
+    })
+  }
+  // 机柜使用率
+  showRackUsage(racks) {}
+  // 机柜容量
+  showRackCapacity(racks) {
+    this.controlRack(false)
+    for (let i = 0; i < racks.length; i++) {
+      new ShowRackCapacity(this.scene, racks[i])
     }
   }
 }

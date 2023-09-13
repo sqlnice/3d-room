@@ -142,7 +142,35 @@ export const racks = [
     py: rackHeight / 2,
     pz: -100,
     name: '机柜1号',
-    usage: 0.2
+    usage: 0.2,
+    hosts: [
+      {
+        h: 10
+      },
+      {
+        h: 20
+      },
+      {
+        h: 30
+      }
+    ]
   },
-  { w: rackWidth, h: rackHeight, depth: rackDepth, px: 0, py: rackHeight / 2, pz: -100, name: '机柜2号', usage: 0.8 }
+  {
+    w: rackWidth,
+    h: rackHeight,
+    depth: rackDepth,
+    px: 0,
+    py: rackHeight / 2,
+    pz: -100,
+    name: '机柜2号',
+    usage: 0.8,
+    hosts: [
+      {
+        h: 20
+      },
+      {
+        h: 40
+      }
+    ]
+  }
 ]

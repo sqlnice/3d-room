@@ -8,7 +8,8 @@ export default class CreateSimpleRack {
     this.init(rack)
   }
   init(rack) {
-    const { w, h, depth, pz, px, py, color = 0x8e8e8e } = rack
+    const { w, h, depth, pz, px, py } = rack
+    const color = 0x8e8e8e
     const rackGeometry = new THREE.BoxGeometry(w, h, depth)
     const texture = new THREE.TextureLoader().load(rackSkin)
     const rackMaterials = [

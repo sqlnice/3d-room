@@ -19,7 +19,7 @@ export default class ThreeCore {
     this.init()
   }
   initRenderer() {
-    const renderer = new THREE.WebGLRenderer({ canvas: this.canvas })
+    const renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true })
     renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer = renderer
   }
