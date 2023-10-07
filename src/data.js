@@ -145,7 +145,7 @@ export const racks = [
     usage: 0.2,
     hosts: [
       {
-        h: 10
+        h: 20
       },
       {
         h: 20

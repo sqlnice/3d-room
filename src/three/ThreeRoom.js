@@ -64,9 +64,9 @@ export default class ThreeRoom extends ThreeCore {
     new Wall(this.scene, walls)
   }
   createRack(configs) {
-    const { racks = [] } = configs
+    const { racks = [], clickRack } = configs
     for (let i = 0; i < racks.length; i++) {
-      new SimpleRack(this.scene, racks[i])
+      new SimpleRack(this.scene, racks[i], clickRack)
     }
   }
   // 控制显隐

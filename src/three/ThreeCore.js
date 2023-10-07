@@ -7,10 +7,10 @@ export default class ThreeCore {
   constructor(canvas, options = {}) {
     if (!canvas) return console.error('canvas is required')
     this.options = options
-    const { scene = {}, camera = {} } = options
+    const { camera = {} } = options
     this.canvas = canvas
     this.initRenderer()
-    this.initScene(scene)
+    this.initScene()
     this.initCamera(camera)
     // 轨道控制器
     this.initControl()
@@ -23,10 +23,8 @@ export default class ThreeCore {
     renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer = renderer
   }
-  initScene(option) {
-    const { background = 0x001111 } = option
+  initScene() {
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(background)
     this.scene = scene
   }
   initCamera(option) {

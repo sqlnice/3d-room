@@ -3,7 +3,7 @@ import { onMounted, ref, reactive } from 'vue'
 import floorImage from '@/assets/floor.jpg'
 import { walls, airs, racks } from './data'
 import ThreeRoom from '@/three/ThreeRoom.js'
-
+import ThreeRack from './ThreeRack.vue'
 const rackInfoStyle = reactive({
   top: '0px',
   left: '0px',
@@ -25,9 +25,6 @@ const closeRackInfo = () => {
 let threeRoom
 onMounted(() => {
   const options = {
-    scene: {
-      background: 0x001111
-    },
     camera: {
       fov: 75,
       aspect: window.innerWidth / window.innerHeight,
@@ -52,9 +49,16 @@ onMounted(() => {
 
   getRackList()
 })
+
+const rackVisible = ref(false)
+const closeRack = () => (rackVisible.value = false)
 const getRackList = () => {
   const configs = {
-    racks
+    racks,
+    clickRack() {
+      closeRackInfo()
+      rackVisible.value = true
+    }
   }
   threeRoom.createRack(configs)
 }
@@ -80,41 +84,50 @@ const operateTemperature = () => {
 </script>
 
 <template>
-  <div class="rack-info" :style="rackInfoStyle">
-    <div class="rack-header">{{ currentRack.name }}机柜</div>
-    <div class="rack-content">
-      <div class="rack-item">
-        <span>机柜名称：</span>
-        <span>{{ currentRack.name }}</span>
-      </div>
-      <div class="rack-item">
-        <span>使用率：</span>
-        <span>
-          <progress max="100" :value="(currentRack.usage || 0) * 100" style="margin-top: 2px"></progress>
-        </span>
+  <div class="room-container">
+    <div class="rack-info" :style="rackInfoStyle">
+      <div class="rack-header">{{ currentRack.name }}机柜</div>
+      <div class="rack-content">
+        <div class="rack-item">
+          <span>机柜名称：</span>
+          <span>{{ currentRack.name }}</span>
+        </div>
+        <div class="rack-item">
+          <span>使用率：</span>
+          <span>
+            <progress max="100" :value="(currentRack.usage || 0) * 100" style="margin-top: 2px"></progress>
+          </span>
+        </div>
       </div>
     </div>
+    <div class="tools">
+      <button class="tool-item" title="重置" @click="resetRack">重置</button>
+      <button class="tool-item" :class="{ active: status === 'usage' }" title="机柜使用率" @click="showRackUsage">
+        机柜使用率
+      </button>
+      <button class="tool-item" :class="{ active: status === 'capacity' }" title="机柜容量" @click="showRackCapacity">
+        机柜容量
+      </button>
+      <button
+        class="tool-item"
+        :class="{ active: status === 'temperature' }"
+        title="温度云展示"
+        @click="operateTemperature">
+        温度云展示
+      </button>
+    </div>
+    <canvas id="three"></canvas>
   </div>
-  <div class="tools">
-    <button class="tool-item" title="重置" @click="resetRack">重置</button>
-    <button class="tool-item" :class="{ active: status === 'usage' }" title="机柜使用率" @click="showRackUsage">
-      机柜使用率
-    </button>
-    <button class="tool-item" :class="{ active: status === 'capacity' }" title="机柜容量" @click="showRackCapacity">
-      机柜容量
-    </button>
-    <button
-      class="tool-item"
-      :class="{ active: status === 'temperature' }"
-      title="温度云展示"
-      @click="operateTemperature">
-      温度云展示
-    </button>
-  </div>
-  <canvas id="three"></canvas>
+  <ThreeRack :item="currentRack" v-if="rackVisible" @closeRack="closeRack"></ThreeRack>
 </template>
 
 <style scoped lang="scss">
+.room-container {
+  background: #101930;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
 .rack-info {
   display: none;
   min-width: 200px;
