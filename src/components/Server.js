@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import TWEEN from '@tweenjs/tween.js'
 import rack_inside from '@/assets/rack_inside.jpg'
 export default class Server {
   constructor(scene, item) {

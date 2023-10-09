@@ -73,8 +73,8 @@ const showRackCapacity = () => {
   threeRoom.showRackCapacity(racks)
 }
 const operateTemperature = () => {
-  if (status.value === 'temperature') return
   status.value = 'temperature'
+  threeRoom.showTemperature()
 }
 </script>
 

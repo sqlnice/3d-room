@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/sqlnice/3d-room#readme",
   "dependencies": {
+    "@mars3d/heatmap.js": "^2.0.7",
     "@tweenjs/tween.js": "^21.0.0",
     "three": "^0.155.0",
     "three-csg-ts": "^3.1.13",

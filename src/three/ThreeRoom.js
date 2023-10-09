@@ -5,6 +5,7 @@ import Wall from '@/components/Wall.js'
 import Air from '@/components/Air.js'
 import SimpleRack from '@/components/SimpleRack.js'
 import ShowRackCapacity from '@/components/ShowRackCapacity.js'
+import Temperature from '@/components/Temperature.js'
 export default class ThreeRoom extends ThreeCore {
   init() {
     if (!this.canvas) return
@@ -80,6 +81,14 @@ export default class ThreeRoom extends ThreeCore {
     this.controlRack(false)
     for (let i = 0; i < racks.length; i++) {
       new ShowRackCapacity(this.scene, racks[i])
+    }
+  }
+  // 展示温度
+  showTemperature() {
+    if (this.temperatureBoard) {
+      this.temperatureBoard.visible = !this.temperatureBoard.visible
+    } else {
+      this.temperatureBoard = new Temperature(this.scene, { width: 800, height: 600 }).board
     }
   }
 }
