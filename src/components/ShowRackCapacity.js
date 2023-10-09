@@ -5,13 +5,13 @@ export default class ShowRackCapacity {
     this.init(rack)
   }
   init(rack) {
-    const { w, h: rackHeight, depth, pz, px, hosts = [] } = rack
+    const { w, h: rackHeight, depth, pz, px, servers = [] } = rack
     const rackGroup = new THREE.Group()
     rackGroup.position.set(px, 0, pz)
     rackGroup.name = 'RackCapacity'
     rackGroup.userData = rack
     let startHeight = 0
-    hosts
+    servers
       .reduce((res, cur, i) => {
         const { h } = cur
         // 主机
@@ -21,7 +21,7 @@ export default class ShowRackCapacity {
           color: 0xffffff
         }
         startHeight += h + 2
-        if (i === hosts.length - 1 && startHeight < rackHeight) {
+        if (i === servers.length - 1 && startHeight < rackHeight) {
           // 最后一块有空余
           res.push({
             h: rackHeight - startHeight,

@@ -14,16 +14,10 @@ export default class CreateRack {
   init(item) {
     const COLOR = 0x8e8e8e
     const BOARD_DEPTH = 2
-    const {
-      config: {
-        size: { w, h, d }, // 尺寸
-        position: { px, py, pz, ry = 0 },
-        type = 'normal'
-      }
-    } = item
+    const { w, h, depth } = item
     const rackGroup = new THREE.Group()
-    rackGroup.position.set(px, py, pz)
-    rackGroup.rotation.y = ry
+    rackGroup.position.set(0, -h / 2, 0)
+    rackGroup.rotation.y = 0
     rackGroup.name = 'RackGroup'
     rackGroup.userData = item
 
@@ -31,14 +25,14 @@ export default class CreateRack {
     const textureSkin = new THREE.TextureLoader().load(rack_skin)
     const materialSkin = new THREE.MeshBasicMaterial({ color: COLOR, map: textureSkin })
     // 机柜上
-    const geometryTop = new THREE.BoxGeometry(w, BOARD_DEPTH, d)
+    const geometryTop = new THREE.BoxGeometry(w, BOARD_DEPTH, depth)
     const materialTop = []
     materialTop.push(
       materialSkin,
       materialSkin,
       new THREE.MeshBasicMaterial({
         color: COLOR,
-        map: canvas2Texture(item.name, { width: w, height: d })
+        map: canvas2Texture(item.name, { width: w, height: depth })
       }),
       materialSkin,
       materialSkin,
@@ -47,11 +41,11 @@ export default class CreateRack {
     const meshTop = new THREE.Mesh(geometryTop, materialTop)
     meshTop.position.set(0, h - 1, 0)
     // 机柜下
-    const geometryBottom = new THREE.BoxGeometry(w, BOARD_DEPTH, d)
+    const geometryBottom = new THREE.BoxGeometry(w, BOARD_DEPTH, depth)
     const meshBottom = new THREE.Mesh(geometryBottom, materialSkin)
     meshBottom.position.set(0, 0, 0)
     // 机柜左
-    const geometryLeft = new THREE.BoxGeometry(BOARD_DEPTH, h, d)
+    const geometryLeft = new THREE.BoxGeometry(BOARD_DEPTH, h, depth)
     const materialLeft = []
     materialLeft.push(
       materialSkin,
@@ -67,7 +61,7 @@ export default class CreateRack {
     const meshLeft = new THREE.Mesh(geometryLeft, materialLeft)
     meshLeft.position.set(-w / 2 + 1, h / 2, 0)
     // 机柜右
-    const geometryRight = new THREE.BoxGeometry(BOARD_DEPTH, h, d)
+    const geometryRight = new THREE.BoxGeometry(BOARD_DEPTH, h, depth)
     const materialRight = []
     materialRight.push(
       materialSkin,
@@ -85,10 +79,10 @@ export default class CreateRack {
     // 机柜后
     const geometryBack = new THREE.BoxGeometry(w, h, BOARD_DEPTH)
     const meshBack = new THREE.Mesh(geometryBack, materialSkin)
-    meshBack.position.set(0, h / 2, -d / 2)
+    meshBack.position.set(0, h / 2, -depth / 2)
     // 机柜前门
     const doorGroup = new THREE.Group()
-    doorGroup.position.set(w / 2, h / 2, d / 2)
+    doorGroup.position.set(w / 2, h / 2, depth / 2)
     const geometryDoor = new THREE.BoxGeometry(w, h, BOARD_DEPTH)
     const materialDoor = []
     materialDoor.push(

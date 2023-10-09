@@ -5,7 +5,7 @@
     <div class="info-container">
       <div class="card-header">{{ currentRack.name }}机柜</div>
       <div class="card-content">
-        <img class="img" src="./assets/rack.png" alt="" />
+        <img class="img" src="./assets/rack.png" alt="机柜缩略图" />
         <div class="card-item">
           <span>机柜名称：</span>
           <span>{{ currentRack.name }}</span>
@@ -18,74 +18,27 @@
         </div>
       </div>
     </div>
-    <!-- <div class="info-container server-info" v-if="currentServer.name">
+    <div class="info-container server-info" v-if="currentServer.name">
       <div class="card-header">{{ currentServer.name }}</div>
       <div class="card-content">
-        <img class="img" src="/scr-web/static/img/three_room/server.png" alt="" />
+        <img class="img" src="./assets/server.png" alt="主机缩略图" />
         <div class="card-item">
           <span>主机名称：</span>
           <span>
             <span class="name">{{ currentServer.name }}</span>
-            <el-tooltip placement="top">
-              <div slot="content" class="table-container">
-                <el-table :data="currentServer.alarms" style="width: 800px">
-                  <el-table-column prop="name" label="告警名称" show-overflow-tooltip> </el-table-column>
-                  <el-table-column label="告警级别" show-overflow-tooltip width="90px">
-                    <template v-slot="scope">
-                      <AlarmStatusIcon :level="scope.row.level"> </AlarmStatusIcon>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="告警源"
-                    show-overflow-tooltip
-                    prop="targetName"
-                    width="80px"></el-table-column>
-                  <el-table-column label="告警内容" show-overflow-tooltip prop="remark"></el-table-column>
-                  <el-table-column label="告警触发时间" show-overflow-tooltip prop="gmtCreate"></el-table-column>
-                  <el-table-column label="已持续时长" show-overflow-tooltip prop="duration"></el-table-column>
-                </el-table>
-              </div>
-              <i class="el-icon-warning alarm-info" v-if="currentServer.alarm"></i>
-            </el-tooltip>
           </span>
         </div>
-        <div class="card-item">
-          <span>数据中心：</span>
-          <span>{{ currentServer.dcname }}</span>
-        </div>
-        <div class="card-item">
-          <span>所属机房：</span>
-          <span>{{ currentServer.roomname }}</span>
-        </div>
-        <div class="card-item">
-          <span>管理IP：</span>
-          <span>{{ currentServer.manageIp }}</span>
-        </div>
-        <div class="card-item">
-          <span>设备类别：</span>
-          <el-tooltip :content="currentServer.category">
-            <span>{{ currentServer.category }}</span>
-          </el-tooltip>
-        </div>
-        <div class="card-item">
-          <span>系统类别：</span>
-          <span>{{ currentServer.osCategory }}</span>
-        </div>
-        <div class="card-item">
-          <span>所属平台：</span>
-          <span>{{ currentServer.vendorName }}</span>
-        </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, defineProps, reactive } from 'vue'
+import { onMounted, defineProps, ref } from 'vue'
 import ThreeRack from '@/three/ThreeRack.js'
 const props = defineProps(['item'])
-const currentRack = reactive({ ...props.item })
-
+const currentRack = ref({ ...props.item })
+let currentServer = ref({})
 let threeRack
 onMounted(() => {
   const options = {
@@ -99,7 +52,10 @@ onMounted(() => {
     needBindEvent: true
   }
   threeRack = new ThreeRack(document.getElementById('three_rack'), options)
-  threeRack.createRack(props.item)
+  const updateServerData = (data = {}) => {
+    currentServer.value = data
+  }
+  threeRack.createRack(props.item, updateServerData)
 })
 </script>
 
@@ -193,36 +149,6 @@ onMounted(() => {
           overflow: hidden;
           text-overflow: ellipsis;
         }
-      }
-    }
-  }
-}
-.alarm-info {
-  color: #f56c6c;
-  cursor: pointer;
-  margin-left: 4px;
-  position: relative;
-  top: -4px;
-}
-.table-container {
-  background: #080e2b;
-  ::v-deep {
-    .el-table {
-      th,
-      tr,
-      td {
-        background: #303133;
-        color: #fff;
-      }
-      &.el-table--enable-row-hover .el-table__body tr:hover > td {
-        background-color: rgba(#303133, 0.9);
-      }
-      &::before {
-        display: none;
-      }
-      td,
-      th {
-        border-bottom: 1px solid rgba(#fff, 0.05);
       }
     }
   }

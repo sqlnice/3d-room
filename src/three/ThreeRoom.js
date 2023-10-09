@@ -75,8 +75,6 @@ export default class ThreeRoom extends ThreeCore {
       if (item.name === 'SimpleRack') item.visible = show
     })
   }
-  // 机柜使用率
-  showRackUsage(racks) {}
   // 机柜容量
   showRackCapacity(racks) {
     this.controlRack(false)

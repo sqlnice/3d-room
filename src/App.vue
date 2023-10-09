@@ -67,11 +67,6 @@ const status = ref('')
 const resetRack = () => {
   status.value = ''
 }
-const showRackUsage = () => {
-  if (status.value === 'usage') return
-  status.value = 'usage'
-  threeRoom.showRackUsage(racks)
-}
 const showRackCapacity = () => {
   if (status.value === 'capacity') return
   status.value = 'capacity'
@@ -102,9 +97,6 @@ const operateTemperature = () => {
     </div>
     <div class="tools">
       <button class="tool-item" title="重置" @click="resetRack">重置</button>
-      <button class="tool-item" :class="{ active: status === 'usage' }" title="机柜使用率" @click="showRackUsage">
-        机柜使用率
-      </button>
       <button class="tool-item" :class="{ active: status === 'capacity' }" title="机柜容量" @click="showRackCapacity">
         机柜容量
       </button>

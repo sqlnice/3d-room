@@ -124,9 +124,9 @@ export const airs = [
   { w: 30, h: h - 10, depth: 15, px: -360, py: 45, pz: 180 }
 ]
 
-const rackWidth = 40,
-  rackHeight = 80,
-  rackDepth = 40
+const rackWidth = 30,
+  rackHeight = 70,
+  rackDepth = 30
 /**
  * @typedef {Object} Rack
  * @property {number} w 宽度
@@ -143,14 +143,17 @@ export const racks = [
     pz: -100,
     name: '机柜1号',
     usage: 0.2,
-    hosts: [
+    servers: [
       {
+        name: '主机 1',
         h: 20
       },
       {
-        h: 20
+        name: '主机 2',
+        h: 10
       },
       {
+        name: '主机 3',
         h: 30
       }
     ]
@@ -164,11 +167,13 @@ export const racks = [
     pz: -100,
     name: '机柜2号',
     usage: 0.8,
-    hosts: [
+    servers: [
       {
+        name: '主机 1',
         h: 20
       },
       {
+        name: '主机 2',
         h: 40
       }
     ]
