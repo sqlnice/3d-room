@@ -86,9 +86,13 @@ export default class ThreeRoom extends ThreeCore {
   // 展示温度
   showTemperature() {
     if (this.temperatureBoard) {
-      this.temperatureBoard.visible = !this.temperatureBoard.visible
+      const board = this.temperatureBoard.board
+      board.visible = !board.visible
     } else {
-      this.temperatureBoard = new Temperature(this.scene, { width: 800, height: 600 }).board
+      this.temperatureBoard = new Temperature(this.scene, { width: 800, height: 600 })
     }
+  }
+  clear() {
+    this.temperatureBoard?.clear()
   }
 }

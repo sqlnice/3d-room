@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, reactive } from 'vue'
+import { onMounted, onUnmounted, ref, reactive } from 'vue'
 import floorImage from '@/assets/floor.jpg'
 import { walls, airs, racks } from './data'
 import ThreeRoom from '@/three/ThreeRoom.js'
@@ -49,7 +49,12 @@ onMounted(() => {
 
   getRackList()
 })
-
+onUnmounted(() => {
+  threeRoom && threeRoom.destroy()
+})
+const destroy = () => {
+  threeRoom && threeRoom.destroy()
+}
 const rackVisible = ref(false)
 const closeRack = () => (rackVisible.value = false)
 const getRackList = () => {
@@ -97,6 +102,7 @@ const operateTemperature = () => {
     </div>
     <div class="tools">
       <button class="tool-item" title="重置" @click="resetRack">重置</button>
+      <button class="tool-item" title="重置" @click="destroy">模拟销毁</button>
       <button class="tool-item" :class="{ active: status === 'capacity' }" title="机柜容量" @click="showRackCapacity">
         机柜容量
       </button>

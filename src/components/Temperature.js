@@ -54,4 +54,8 @@ export default class Temperature {
     root.removeChild(ele)
     return instance._renderer.canvas
   }
+  clear() {
+    clearInterval(this.timer)
+    this.timer = null
+  }
 }

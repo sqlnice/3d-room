@@ -15,8 +15,10 @@ export default class ThreeCore {
     // 轨道控制器
     this.initControl()
     this.initLight()
-    requestAnimationFrame(() => this.render())
-    window.addEventListener('resize', () => this.onWindowResize())
+    this.render()
+    window.onresize = () => {
+      this.onWindowResize()
+    }
     this.init()
   }
   initRenderer() {
@@ -76,9 +78,52 @@ export default class ThreeCore {
     const { needTween = true } = this.options
     needTween && TWEEN.update()
     this.renderer.render(this.scene, this.camera)
-    requestAnimationFrame(() => this.render())
+    this.rafId = requestAnimationFrame(() => this.render())
   }
-
+  dispose(obj) {
+    while (obj.children.length > 0) {
+      this.dispose(obj.children[0])
+      obj.remove(obj.children[0])
+    }
+    obj.geometry?.dispose?.()
+    console.log(obj.material)
+    if (obj.material) {
+      Object.keys(obj.material).forEach(prop => {
+        if (!obj.material[prop]) return
+        if (obj.material[prop]?.map !== null && typeof obj.material[prop].map?.dispose === 'function')
+          obj.material[prop].map.dispose()
+        if (obj.material[prop] !== null && typeof obj.material[prop].dispose === 'function') {
+          obj.material[prop].dispose()
+        }
+      })
+      obj.material.map?.dispose?.()
+      obj.material.dispose?.()
+    }
+  }
+  clearScene() {
+    const children = this.scene.children
+    children.map(child => {
+      this.dispose(this.scene, child)
+    })
+    this.scene.remove()
+    this.scene = null
+  }
+  destroy() {
+    cancelAnimationFrame(this.rafId)
+    this.rafId = null
+    window.onresize = null
+    this.clear()
+    this.canvas.ondblclick = null
+    this.canvas.onmousemove = null
+    this.renderer.dispose()
+    this.renderer.forceContextLoss()
+    this.renderer.content = null
+    this.renderer.domElement = null
+    this.clearScene()
+    this.camera = null
+    this.controls = null
+    console.log('three.js is destroyed', this.renderer.info)
+  }
   getOperateObject(event) {
     event.preventDefault()
     const { offsetWidth, offsetHeight } = this.canvas
