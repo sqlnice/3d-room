@@ -16,6 +16,7 @@ export default class ThreeCore {
     this.initControl()
     this.initLight()
     requestAnimationFrame(() => this.render())
+    window.addEventListener('resize', () => this.onWindowResize())
     this.init()
   }
   initRenderer() {
@@ -30,7 +31,7 @@ export default class ThreeCore {
   initCamera(option) {
     const {
       fov = 75,
-      aspect = window.innerWidth / window.innerHeight,
+      aspect = this.canvas.clientWidth / this.canvas.clientHeight,
       near = 0.1,
       far = 2000,
       position = { x: 0, y: 800, z: 400 },
@@ -61,11 +62,16 @@ export default class ThreeCore {
     light.position.set(0, 0, 0)
     this.scene.add(light)
   }
+  onWindowResize() {
+    this.camera.aspect = window.innerWidth / window.innerHeight
+    this.camera.updateProjectionMatrix()
+    this.renderer.setSize(window.innerWidth, window.innerHeight)
+  }
   render(time) {
     time *= 0.001
     if (resizeRendererToDisplay(this.renderer)) {
       this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight
-      this.camera.updateMatrix()
+      this.camera.updateProjectionMatrix()
     }
     const { needTween = true } = this.options
     needTween && TWEEN.update()

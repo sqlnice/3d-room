@@ -26,11 +26,11 @@ let threeRoom
 onMounted(() => {
   const options = {
     camera: {
-      fov: 75,
+      fov: 45,
       aspect: window.innerWidth / window.innerHeight,
       near: 0.1,
       far: 2000,
-      position: { x: 0, y: 800, z: 400 },
+      position: { x: 0, y: 600, z: 600 },
       axesHelperSize: 500
     },
     floor: {
